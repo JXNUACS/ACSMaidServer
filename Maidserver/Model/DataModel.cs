@@ -34,20 +34,43 @@ namespace MaidServer
     /// </summary>
     internal class Printer
     {
-        public string printerName { get; set; }
-        public string description { get; set; }
-        public string location { get; set; }
-        public string makeAndmodel { get; set; }
-        public string status { get; set; }
+        public string PrinterName { get; set; }
+        public string Description { get; set; }
+        public string Location { get; set; }
+        public string MakeAndModel { get; set; }
+        public string Status { get; set; }
         public Printer(string name, string des, string loc, string mam, string st)
         {
-            this.printerName = name;
-            this.description = des;
-            this.location = loc;
-            this.makeAndmodel = mam;
-            this.status = st;
+            this.PrinterName = name;
+            this.Description = des;
+            this.Location = loc;
+            this.MakeAndModel = mam;
+            this.Status = st;
         }
+    }
 
+    /// <summary>
+    /// 打印任务基类
+    /// </summary>
+    internal class PrintJobs
+    {
+        public string ID { get; set; }
+        public string Name { get; set; }
+        public string User { get; set; }
+        public string Size { get; set; }
+        public string Pages { get; set; }
+        public string Status { get; set; }
+        public string Control { get; set; }
+        public PrintJobs(string id, string name, string user, string size, string pages, string status, string control)
+        {
+            this.ID = id;
+            this.Name = name;
+            this.User = user;
+            this.Size = size;
+            this.Pages = pages;
+            this.Status = status;
+            this.Control = control;
+        }
     }
 
     /// <summary>

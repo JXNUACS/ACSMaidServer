@@ -26,7 +26,8 @@ namespace MaidServer
             //Console.WriteLine(SqlHelper.QueryUsers("admin").name);         
             //SQL_USERS.RegisterUsers(0,"testuser", "test");
             //SQL_USERS.DeleteUsers("testuser", "test", 0);
-            CUPSInf.CheckCUPS();
+            //WebScarp.FromWeb();
+            CUPSInf.GetCurrentPrintJobs();
         }
 
         private static void ServerInit()

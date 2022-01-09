@@ -57,6 +57,15 @@ namespace MaidServer
             catch { }
             return doc;
         }
+        
+        protected static void Debug(Exception ex, Color C)
+        {
+            Console.WriteLine(@"*|WebScarp DEBUG|\> " + ex, C);
+        }
+        protected static void Debug(string str, Color C)
+        {
+            Console.WriteLine(@"*|WebScarp DEBUG|\> " + str, C);
+        }
     }
 
     internal abstract class CUPSInf : WebScarp
@@ -66,6 +75,7 @@ namespace MaidServer
         .AddJsonFile("appsettings.json").Build();
         private static readonly string CUPSServer = @configuration["ServcieEnv:CUPSServer"];
         private static readonly string CUPSPrinter = CUPSServer + @"printers/";
+        private static readonly bool DEBUG_MOD = configuration["env:DEBUG_MOD"] == "true" ? true : false;
         private static bool CUPSStatus = false;
         public static string CUPSVersion = "NULL";
         static CUPSInf()
@@ -94,7 +104,11 @@ namespace MaidServer
                         }
                     }
                 }
-                catch {}
+                catch (Exception ex)
+                {
+                    if(DEBUG_MOD)
+                        Debug(ex, Color.Red);
+                }
             }
             //Console.WriteLine(CUPSVersion);
         }
@@ -135,11 +149,43 @@ namespace MaidServer
                 }
                 catch {}
             }
+            /*
             foreach(var p in printerList)
             {
                 Console.WriteLine(p);
-            }
+            }*/
             return printerList;
+        }
+
+        public static List<PrintJobs> GetCurrentPrintJobs()
+        {
+            List<PrintJobs> jobsList = new List<PrintJobs>();
+            if (CUPSStatus)
+            {
+                var doc = ScarpHtml(CUPSServer + @"jobs");
+                try
+                {
+                    //解析CUPS打印机信息
+                    foreach (HtmlNode table in doc.DocumentNode.SelectNodes("//table"))
+                    {
+                        //Console.WriteLine("Found: " + table.Id);
+                        foreach (HtmlNode row in table.SelectNodes(".//tr"))
+                        {
+                            HtmlNodeCollection rowData = row.SelectNodes(".//th|td");
+                            List<string> res = rowData.Select(i => i.InnerText.Replace(@"&nbsp;", string.Empty)).ToList();
+                            if (res[0].Contains("ID") || res.Count < 5)
+                                continue;
+                            jobsList.Add(new PrintJobs(res[0], res[1], res[2], res[3], res[4], res[5], res[6]));
+                        }
+                    }
+                }
+                catch(Exception ex)
+                {
+                    if(DEBUG_MOD)
+                        Debug(ex, Color.Red);
+                }
+            }
+            return jobsList;
         }
     }
 }
