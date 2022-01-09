@@ -30,6 +30,27 @@ namespace MaidServer
         
     }
     /// <summary>
+    /// 打印机对象基类
+    /// </summary>
+    internal class printer
+    {
+        public string printerName { get; set; }
+        public string description { get; set; }
+        public string location { get; set; }
+        public string makeAndmodel { get; set; }
+        public string status { get; set; }
+        public printer(string name, string des, string loc, string mam, string st)
+        {
+            this.printerName = name;
+            this.description = des;
+            this.location = loc;
+            this.makeAndmodel = mam;
+            this.status = st;
+        }
+
+    }
+
+    /// <summary>
     /// Some algorithm used in this project
     /// </summary>
     internal abstract class algorithm
