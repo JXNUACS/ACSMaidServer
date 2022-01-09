@@ -57,27 +57,6 @@ namespace MaidServer
             catch { }
             return doc;
         }
-
-        //TODO:异常捕获+完善类
-        public static void FromWeb()
-        {
-            var html = @"http://192.168.1.2:631/printers/";
-            HtmlWeb web = new HtmlWeb();
-            HtmlDocument doc = web.Load(html);
-            foreach (HtmlNode table in doc.DocumentNode.SelectNodes("//table"))
-            {
-                Console.WriteLine("Found: " + table.Id);
-                foreach (HtmlNode row in table.SelectNodes(".//tr"))
-                {
-                    Console.WriteLine("row");
-                    foreach (HtmlNode cell in row.SelectNodes(".//th|td"))
-                    {
-                        Console.WriteLine("cell: " + cell.InnerText);
-                    }
-                }
-            }
-        }
-
     }
 
     internal abstract class CUPSInf : WebScarp
