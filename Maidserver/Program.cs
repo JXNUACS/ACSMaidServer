@@ -12,7 +12,6 @@ using System.Data.SqlClient;
 using MySql.Data.MySqlClient;
 using Microsoft.Extensions.Configuration;
 
-
 namespace MaidServer
 {
 
@@ -22,12 +21,12 @@ namespace MaidServer
 
         static void Main(string[] args)
         {
-            //ServerInit();
+            ServerInit();
             //Console.WriteLine(SqlHelper.QueryUsers("admin").name);         
             //SQL_USERS.RegisterUsers(0,"testuser", "test");
             //SQL_USERS.DeleteUsers("testuser", "test", 0);
             //WebScarp.FromWeb();
-            CUPSInf.GetCurrentPrintJobs();
+            //CUPSInf.GetCurrentPrintJobs();
         }
 
         private static void ServerInit()

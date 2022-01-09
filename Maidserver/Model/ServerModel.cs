@@ -1,3 +1,6 @@
+#pragma warning disable 8625
+#pragma warning disable 8602
+#pragma warning disable 8622
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -9,7 +12,6 @@ using System.Net.Sockets;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration;
-
 
 namespace MaidServer
 {

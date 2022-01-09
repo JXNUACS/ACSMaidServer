@@ -1,3 +1,4 @@
+#pragma warning disable 8603
 using MySql.Data.MySqlClient;
 using Microsoft.Extensions.Configuration;
 using System.Text;
