@@ -78,6 +78,9 @@ namespace MaidServer
         private static readonly bool DEBUG_MOD = configuration["env:DEBUG_MOD"] == "true" ? true : false;
         private static bool CUPSStatus = false;
         public static string CUPSVersion = "NULL";
+        /// <summary>
+        /// 静态构造函数，用于解析CUPS服务状态
+        /// </summary>
         static CUPSInf()
         {
             // 解析IP地址和端口，并检查是否可以正常访问服务器
@@ -112,6 +115,10 @@ namespace MaidServer
             }
             //Console.WriteLine(CUPSVersion);
         }
+        /// <summary>
+        /// 查看CUPS服务状态
+        /// </summary>
+        /// <returns></returns>
         public static bool CheckCUPS()
         {
             if (CUPSStatus && CUPSVersion.Contains("CUPS"))
@@ -124,7 +131,10 @@ namespace MaidServer
                 return false;
             }
         }
-
+        /// <summary>
+        /// 获取打印机机信息
+        /// </summary>
+        /// <returns></returns>
         public static List<Printer> GetPrinters()
         {
             List<Printer> printerList = new List<Printer>();
@@ -156,7 +166,10 @@ namespace MaidServer
             }*/
             return printerList;
         }
-
+        /// <summary>
+        /// 获取当前打印队列信息
+        /// </summary>
+        /// <returns></returns>
         public static List<PrintJobs> GetCurrentPrintJobs()
         {
             List<PrintJobs> jobsList = new List<PrintJobs>();
