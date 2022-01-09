@@ -32,14 +32,14 @@ namespace MaidServer
     /// <summary>
     /// 打印机对象基类
     /// </summary>
-    internal class printer
+    internal class Printer
     {
         public string printerName { get; set; }
         public string description { get; set; }
         public string location { get; set; }
         public string makeAndmodel { get; set; }
         public string status { get; set; }
-        public printer(string name, string des, string loc, string mam, string st)
+        public Printer(string name, string des, string loc, string mam, string st)
         {
             this.printerName = name;
             this.description = des;

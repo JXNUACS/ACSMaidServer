@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -53,7 +54,7 @@ namespace MaidServer
             {
                 doc = web.Load(html);
             }
-            catch {}
+            catch { }
             return doc;
         }
 
@@ -85,26 +86,27 @@ namespace MaidServer
         .SetBasePath(Directory.GetCurrentDirectory())
         .AddJsonFile("appsettings.json").Build();
         private static readonly string CUPSServer = @configuration["ServcieEnv:CUPSServer"];
-        private static readonly string CUPSPrinter = CUPSServer + @"/printers/";
+        private static readonly string CUPSPrinter = CUPSServer + @"printers/";
         private static bool CUPSStatus = false;
-        public static string CUPSVersion = "";
+        public static string CUPSVersion = "NULL";
         static CUPSInf()
         {
-            // 解析IP地址和端口，并检查是否可以
+            // 解析IP地址和端口，并检查是否可以正常访问服务器
             int ipIndex = CUPSServer.LastIndexOf("http://") + 7;
             int portIndex = CUPSServer.LastIndexOf(":") + 1;
             string CUPSServerIpAddress = CUPSServer.Substring(ipIndex, portIndex - ipIndex - 1);
             string CUPSServerPort = "";
-            for(int i = portIndex; CUPSServer[i] != '/'; i++)
+            for (int i = portIndex; CUPSServer[i] != '/'; i++)
             {
                 CUPSServerPort += CUPSServer[i];
             }
             CUPSStatus = CheckConnect(CUPSServerIpAddress, int.Parse(CUPSServerPort));
-            if(CUPSStatus)
+            if (CUPSStatus)
             {
                 var doc = ScarpHtml(@CUPSServer);
                 try
                 {
+                    //解析CUPS地址页信息
                     foreach (HtmlNode div in doc.DocumentNode.SelectNodes("//div[@class='row']"))
                     {
                         foreach (HtmlNode h1 in div.SelectNodes(".//h1"))
@@ -115,12 +117,50 @@ namespace MaidServer
                 }
                 catch {}
             }
-            Console.WriteLine(CUPSVersion);
+            //Console.WriteLine(CUPSVersion);
         }
         public static bool CheckCUPS()
         {
-            //a
-            return false;
+            if (CUPSStatus && CUPSVersion.Contains("CUPS"))
+            {
+                return true;
+            }
+            else
+            {
+                CUPSStatus = false;
+                return false;
+            }
+        }
+
+        public static List<Printer> GetPrinters()
+        {
+            List<Printer> printerList = new List<Printer>();
+            if (CUPSStatus)
+            {
+                var doc = ScarpHtml(CUPSPrinter);
+                try
+                {
+                    //解析CUPS打印机信息
+                    foreach (HtmlNode table in doc.DocumentNode.SelectNodes("//table"))
+                    {
+                        //Console.WriteLine("Found: " + table.Id);
+                        foreach (HtmlNode row in table.SelectNodes(".//tr"))
+                        {
+                            HtmlNodeCollection rowData = row.SelectNodes(".//th|td");
+                            List<string> res = rowData.Select(i => i.InnerText).ToList();
+                            if (res[0] == "Queue Name")
+                                continue;
+                            printerList.Add(new Printer(res[0], res[1], res[2], res[3], res[4]));
+                        }
+                    }
+                }
+                catch {}
+            }
+            foreach(var p in printerList)
+            {
+                Console.WriteLine(p);
+            }
+            return printerList;
         }
     }
 }
