@@ -11,10 +11,37 @@ using System.Net;
 using System.Net.Sockets;
 using System.Text;
 using System.Threading.Tasks;
+using System.Net.NetworkInformation;
 using Microsoft.Extensions.Configuration;
 
 namespace MaidServer
 {
+    public class ServerModel
+    {
+        static IConfiguration configuration = new ConfigurationBuilder()
+        .SetBasePath(Directory.GetCurrentDirectory())
+        .AddJsonFile("appsettings.json").Build();
+        
+        private string serverIP = configuration["env:IPAddress"];
+        private int serverPort = int.Parse(configuration["env:port"]);
+        private Socket socket = null;
+        private byte[] buffer = new byte[1024 * 1024 * 2];
+
+        private static bool CheckPort(int port)
+        {
+            IPGlobalProperties ipProperties = IPGlobalProperties.GetIPGlobalProperties();
+            IPEndPoint[] iPEndPoints = ipProperties.GetActiveTcpListeners();
+            foreach(IPEndPoint endPoint in iPEndPoints)
+            {
+                if(endPoint.Port == port)
+                {
+                    return false;
+                }
+            }
+            return true;
+        }
+
+    }
     public class SocketServer
     {
         private string _ip = string.Empty;
